@@ -1,5 +1,5 @@
 {
-    "name": "Wanderer",
+    "name": "Leader",
     "type": "dynamic",
     "description": "A Wandering Robot",
     "shape": [
@@ -44,5 +44,5 @@
         }
     ],
     "mass": 0.25,
-    "controller": "lib/wanderer.so"
+    "controller": "lib/leader.so"
 }
