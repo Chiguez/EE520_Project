@@ -27,18 +27,19 @@ class followerController : public Process, public AgentInterface {
           y = e.value()["y"];
           v = e.value()["v"];
         });
+        /*
         watch("screen_click", [this](Event e) {
-             Agent& v = add_agent("follower", 0, 0, 0, {{"fill": "bllue"},{"stroke": "black"}});
-         });
+             Agent& v = add_agent("follower", 0, 0, 0, {{"fill": "blue"},{"stroke": "black"}});
+         });*/
      } else {
        watch("F_Posn" + std::to_string(robot_id-1), [this](Event e) {
          x = e.value()["x"];
          y = e.value()["y"];
          v = e.value()["v"];
        });
-       watch("screen_click", [this](Event e) {
-            Agent& v = add_agent("follower", 0, 0, 0, {{"fill": "bllue"},{"stroke": "black"}});
-        });
+       /*watch("screen_click", [this](Event e) {
+            Agent& v = add_agent("follower", 0, 0, 0, {{"fill": "blue"},{"stroke": "black"}});
+        });*/
      }
     }
 
