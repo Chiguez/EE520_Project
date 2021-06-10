@@ -39,10 +39,10 @@ emit(Event("F_Posn"+ std::to_string(robot_id), {{"x",position().x},{"y",position
        y = e.value()["y"];
        v = e.value()["v"];
      });
-     /*
-     watch("screen_click", [this](Event e) {
-          Agent& v = add_agent("follower", 0, 0, 0, {{"fill": "blue"},{"stroke": "black"}});
-      });*/
+
+     watch("screen_click", [this](Event c) {
+         teleport(c.value()["x"], c.value()["y"], 0);
+      });
   } else {
 
     //watches the previous robot
@@ -51,9 +51,9 @@ emit(Event("F_Posn"+ std::to_string(robot_id), {{"x",position().x},{"y",position
       y = e.value()["y"];
       v = e.value()["v"];
     });
-    /*watch("screen_click", [this](Event e) {
-         Agent& v = add_agent("follower", 0, 0, 0, {{"fill": "blue"},{"stroke": "black"}});
-     });*/
+    watch("screen_click", [this](Event c) {
+        teleport(c.value()["x"], c.value()["y"], 0);
+     });
   }
  }
  ```
