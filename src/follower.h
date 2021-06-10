@@ -18,6 +18,8 @@ class followerController : public Process, public AgentInterface {
     string event_name;
     followerController() : Process(), AgentInterface() {}
 
+    /* Initializes our variable and sets up the watche
+    so that this will watch the leader/followers */
     void init() {
       robot_id = id();
       event_name = "F_posn" + to_string(robot_id);
@@ -32,6 +34,8 @@ class followerController : public Process, public AgentInterface {
              Agent& v = add_agent("follower", 0, 0, 0, {{"fill": "blue"},{"stroke": "black"}});
          });*/
      } else {
+
+       //watches the previous robot
        watch("F_Posn" + std::to_string(robot_id-1), [this](Event e) {
          x = e.value()["x"];
          y = e.value()["y"];
@@ -46,30 +50,17 @@ class followerController : public Process, public AgentInterface {
     void start() {}
     void update() {
 
+      //This is to emit a unique process for each follower created
       emit(Event("F_Posn"+ std::to_string(robot_id), {{"x",position().x},{"y",position().y},{"v",v}}));
-      /*
-      if (robot_id < 2) {
-        watch("Leader_Posn", [this](Event e) {
-          x = e.value()["x"];
-          y = e.value()["y"];
-          v = e.value()["v"];
-        });
-     } else {
-       watch("F_Posn" + std::to_string(robot_id-1), [this](Event e) {
-         x = e.value()["x"];
-         y = e.value()["y"];
-         v = e.value()["v"];
-       });
-     }
-     */
+      
       r_target = pow(x*x+y*y,0.5);
       r_loc =  pow(position().x*position().x+position().y*position().y,0.5);
       d_error=pow ((x-position().x)*(x-position().x)+(y-position().y)*(y-position().y),.5);
      //cout << "moving to: " << target_x <<  "," << target_y << endl;
      if (d_error > 100) {
         //cout << "fast" << endl;
-        move_toward(x,y,1.2*v,100);
-     } else if (40 < d_error && d_error < 100) {
+        move_toward(x,y,1.1*v,100);
+     } else if (80 < d_error && d_error < 100) {
         //cout << "slow" << endl;
         move_toward(x,y,0.5*v,100);
      } else {

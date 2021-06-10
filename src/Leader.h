@@ -124,7 +124,8 @@ namespace
 
             set_initial(top_right);
             tick_name = "tick_" + std::to_string(rand() % 1000); // use an agent specific generated
-                                                                 // event name in case there are
+
+            //Forms a counter clockwise loop
             add_transition(tick_name, top_right, top_left);
             add_transition(tick_name, top_left,  bot_left);
             add_transition(tick_name, bot_left,  bot_right);                                                      // multiple instances of this class

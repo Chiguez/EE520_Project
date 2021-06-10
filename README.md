@@ -20,10 +20,42 @@ As a starting base we took 2 different approaches. For the leader we based the c
 There were 2 main challenges that came up during the development of this project.
 
 
-*The first was tuning each robot to move smoothly. Because of the physics implemented in the code (friction and such) we had to mindful of all values selected in terms of position, velocity, and etc. For example, setting a rotational speed could cause the robot to overshoot and overturn thus it would take a few moment until it would correct itself and move straight. The followers required a lot of tuning in order for it maintain a good speed and distance behind the leader without crashing. To address this, it was a lot of trial and error of methods and values until we reached something consistent.
+- The first was tuning each robot to move smoothly. Because of the physics implemented in the code (friction and such) we had to mindful of all values selected in terms of position, velocity, and etc. For example, setting a rotational speed could cause the robot to overshoot and overturn thus it would take a few moment until it would correct itself and move straight. The followers required a lot of tuning in order for it maintain a good speed and distance behind the leader without crashing. To address this, it was a lot of trial and error of methods and values until we reached something consistent.
 
-*The second was trying to cleverly create a single follower class, that would know whether to follow the leader or follow the follower. To address this we took advantage of the built-in id() function. We then concatenate the id with our emit so that if there are multiple follower, each will emit a unique process.
-To sort this we use an if statement to sort if the follower should be watching the leader or follower. See section below:
+ - The second was trying to cleverly create a single follower class, that would know whether to follow the leader or follow the follower. To address this we took advantage of the built-in id() function. We then concatenate the id with our emit so that if there are multiple follower, each will emit a unique process.
+```bash
+emit(Event("F_Posn"+ std::to_string(robot_id), {{"x",position().x},{"y",position().y},{"v",v}}));
+```
+
+ To sort this we use an if statement to decide if the follower should be watching the leader or follower. See section below:
+
+ ```bash
+ void init() {
+   robot_id = id();
+   event_name = "F_posn" + to_string(robot_id);
+   if (robot_id < 2) {
+     watch("Leader_Posn", [this](Event e) {
+       x = e.value()["x"];
+       y = e.value()["y"];
+       v = e.value()["v"];
+     });
+     /*
+     watch("screen_click", [this](Event e) {
+          Agent& v = add_agent("follower", 0, 0, 0, {{"fill": "blue"},{"stroke": "black"}});
+      });*/
+  } else {
+
+    //watches the previous robot
+    watch("F_Posn" + std::to_string(robot_id-1), [this](Event e) {
+      x = e.value()["x"];
+      y = e.value()["y"];
+      v = e.value()["v"];
+    });
+    /*watch("screen_click", [this](Event e) {
+         Agent& v = add_agent("follower", 0, 0, 0, {{"fill": "blue"},{"stroke": "black"}});
+     });*/
+  }
+ }
 
 ## Set Up Instructions
 
@@ -32,7 +64,7 @@ Please start your docker container with something like
 ```bash
 docker pull klavins/elma:latest
 ```
-o start a Docker container with ENVIRO pre-loaded into it, do:
+To start a Docker container with ENVIRO pre-loaded into it, do:
 
 ```bash
 docker run -p80:80 -p8765:8765 -v $PWD:/source -it klavins/enviro:alpha bash
@@ -57,3 +89,9 @@ The above commands do the following:
 make
 enviro
 ```
+From here you should be able to view the robot and followers from http://localhost
+
+## Acknowledgements
+- Lectures from https://github.com/tbonaciUW/EEP_520_Spring2021
+- Info on ENVIRO: https://github.com/klavinslab/enviro
+- Info on Elma: http://klavinslab.org/elma/index.html
