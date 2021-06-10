@@ -13,7 +13,7 @@ another robot that would follow the leader. The main requirements are:
 
 ## Implementation
 
-As a starting base we took 2 different approaches. For the leader we based the class off of the Wanderer class. Using a finite state machine we would coordinate 4 locations (each being a different state to move to) to form our loop. The leader would then emit it's position and velocity for the follower to receive. Since the follower is to just follow we had it watch the emitted location of the Leader and would move to it's location. Through trial and error we would tune the follower to change speed based on its distance from the Leader.
+As a starting base we took 2 different approaches. For the leader we based the class off of the Wanderer class. Using a finite state machine we would coordinate 4 locations (each being a different state to move to) to form our loop. The leader would then emit it's position and velocity for the follower to receive. Since the follower is to just follow we had it watch the emitted location of the Leader and would move to it's location. Through trial and error we would tune the follower to change speed based on its distance from the Leader. In addition to the capability of creating a train of followers we added a click feature that would teleport the followers to the clicked position. After the teleporting the follower would then start moving to their train like configuration.
 
 ## Challenges
 
@@ -56,7 +56,7 @@ emit(Event("F_Posn"+ std::to_string(robot_id), {{"x",position().x},{"y",position
      });*/
   }
  }
-
+ ```
 ## Set Up Instructions
 
 Please start your docker container with something like
@@ -90,6 +90,12 @@ make
 enviro
 ```
 From here you should be able to view the robot and followers from http://localhost
+
+## Improvements
+There are a few improvements that we could improve in the future:
+1. Improve distance between each robot so that there is less space changing
+2. Implement other features such as with keyboard inputs we can add/delete more followers
+3. Add different formations such that robots can flock
 
 ## Acknowledgements
 - Lectures from https://github.com/tbonaciUW/EEP_520_Spring2021

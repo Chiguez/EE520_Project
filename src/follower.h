@@ -29,10 +29,10 @@ class followerController : public Process, public AgentInterface {
           y = e.value()["y"];
           v = e.value()["v"];
         });
-        /*
-        watch("screen_click", [this](Event e) {
-             Agent& v = add_agent("follower", 0, 0, 0, {{"fill": "blue"},{"stroke": "black"}});
-         });*/
+
+        watch("screen_click", [this](Event c) {
+            teleport(c.value()["x"], c.value()["y"], 0);
+         });
      } else {
 
        //watches the previous robot
@@ -41,9 +41,9 @@ class followerController : public Process, public AgentInterface {
          y = e.value()["y"];
          v = e.value()["v"];
        });
-       /*watch("screen_click", [this](Event e) {
-            Agent& v = add_agent("follower", 0, 0, 0, {{"fill": "blue"},{"stroke": "black"}});
-        });*/
+       watch("screen_click", [this](Event c) {
+           teleport(c.value()["x"], c.value()["y"], 0);
+        });
      }
     }
 
@@ -52,7 +52,7 @@ class followerController : public Process, public AgentInterface {
 
       //This is to emit a unique process for each follower created
       emit(Event("F_Posn"+ std::to_string(robot_id), {{"x",position().x},{"y",position().y},{"v",v}}));
-      
+
       r_target = pow(x*x+y*y,0.5);
       r_loc =  pow(position().x*position().x+position().y*position().y,0.5);
       d_error=pow ((x-position().x)*(x-position().x)+(y-position().y)*(y-position().y),.5);
